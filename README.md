@@ -27,9 +27,11 @@ STEP 1: PRODUCE A TABLE WITH THE VALUE OF THE CROSS-SECTION IN A GIVEN (THETA, E
 
 ------------------------------------------------------------------------------------------------
 
-Misak software can be set through the file init_incl.dat.
+Misak software is in the directory
 
-It contains the following text:
+cross_section_calculation
+
+It can be set through the file init_incl.dat, that contains the following text:
 
 
 INCIDENT   ELECTRON    6.000   0.000   0.000   0.000   0.000   0.000      
