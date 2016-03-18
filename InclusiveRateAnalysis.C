@@ -1215,7 +1215,7 @@ void InclusiveRateAnalysis::GeneratePseudoData( Int_t _n_events, Int_t _n_events
 
   if( _n_events % _n_events_per_lundfile ) _n_lund_files += 1 ; /* to account for the residual events */
 
-  cout << " _n_lund_files is " << _n_lund_files << endl ;
+  cout << " _n_lund_files is " << _n_lund_files << "\n" << endl ;
 
   /* out lundfile */
   ofstream _out_lund_file[ _n_lund_files ] ;
@@ -1225,7 +1225,7 @@ void InclusiveRateAnalysis::GeneratePseudoData( Int_t _n_events, Int_t _n_events
   /* produce _n_events simulated data */
   for( Int_t _iev = 0 ; _iev < _n_events ; _iev++  ){
 
-    if( _iev && _iev % 1000 == 0 ) cout << " Generated " << _iev << " events " << endl ; 
+    if( _iev && _iev % _n_events_per_lundfile == 0 ) cout << " Generated " << _iev << " events " << endl ; 
 
     Int_t _file_number = TMath::Floor( _iev/_n_events_per_lundfile ) ;
 
@@ -1573,9 +1573,9 @@ void InclusiveRateAnalysis::SetKinematicLimits( Double_t _theta_min, Double_t _t
 
   energyBeam = _e_beam ;
 
-  cout << Form( " Analyzing the range %g - %g in step of %g, with Npoints=%d and E_{beam} = %g \n", thetaMin,  thetaMax,  thetaStep,  thetaPointN, energyBeam  ) << endl ; 
+  cout << Form( "\n Analyzing the range %g - %g in step of %g, with Npoints=%d and E_{beam} = %g \n", thetaMin,  thetaMax,  thetaStep,  thetaPointN, energyBeam  ) << endl ; 
 
-  cout << Form( " Analyzing the range %g - %g in step of %g, with Npoints=%d and E_{beam} = %g \n", energyMin, energyMax, energyStep, energyPointN, energyBeam ) << endl ; 
+  cout << Form( "\n Analyzing the range %g - %g in step of %g, with Npoints=%d and E_{beam} = %g \n", energyMin, energyMax, energyStep, energyPointN, energyBeam ) << endl ; 
 
   return;
 

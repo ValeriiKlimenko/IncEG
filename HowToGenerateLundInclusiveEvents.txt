@@ -210,6 +210,48 @@ adds in the output rootfile some monitoring histograms as the comparison of the 
 
 * ------------------------------------- *
 
+      OUTPUT MESSAGE OF THE MACRO
+
+* ------------------------------------- *
+
+While running, the macro provides the following information:
+
+**************************************************************************************
+
+ Analyzing the range 5 - 35 in step of 0.5, with Npoints=61 and E_{beam} = 11 
+
+ Analyzing the range 0.5 - 10.9 in step of 0.005, with Npoints=2081 and E_{beam} = 11 
+
+ Analyzing file cross_section_data/data_5_35_0.5_10.9_11.0GeV.dat
+
+ Luminosity set to 1e+35 cm^-2 s^-1 
+
+ Total rate is 1.95363 kHz 
+
+ Integrated rad cross-section is 0.370401 mubarn 
+
+ _n_lund_files is 5
+
+ Generated N events 
+
+**************************************************************************************
+
+
+First two lines report the range explored in energy and theta and the number of kinematical points used in the cross-section calculation through Misak generator.
+
+Third line shows the name of the file (coming from Misak' code) used to generate the events.
+
+Fourth line shows the set luminosity.
+
+Fifth line is the total inclusive electron rate estimated in the set range, at the given luminosity, by applying the clasev phi-acceptance.
+
+Sisth line is the integrated cross-section in the range.
+
+Last lines show the number of lund files to be produced (depending on the number of generated events and the number of events to be allocated in any lund file),
+while the last lines update on the progress on the actual number of generated events.
+
+* ------------------------------------- *
+
       CONTENT OF THE OUTPUT FILE
 
 * ------------------------------------- *
