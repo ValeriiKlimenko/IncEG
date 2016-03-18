@@ -23,7 +23,21 @@ STEP 1: PRODUCE A TABLE WITH THE VALUE OF THE CROSS-SECTION IN A GIVEN (THETA, E
 
 ------------------------------------------------------------------------------------------------
 
-Misak software can be set through the file init_incl.dat.
+The following software is contained in the directory
+
+cross_section_calculation/
+
+First of all, compile the executable "inclusive" through
+
+g77 -o inclusive inclusive.f
+
+or
+
+gfortran -o inclusive inclusive.f
+
+depending on the compiler installed on the machine.
+
+Set then the configuration to be analyzed through the file init_incl.dat.
 
 It contains the following text:
 
@@ -194,6 +208,65 @@ n3 ( = "lund_files"         ): directory for storing the lund files - if any.
 adds in the output rootfile some monitoring histograms as the comparison of the generated distributions to the original ones.
 
 
+* ------------------------------------- *
+
+      CONTENT OF THE OUTPUT FILE
+
+* ------------------------------------- *
+
+The output file contains different objects (TGraph, histograms or canvases).
+
+
+a) The canvas
+
+TCanvas  c_mg
+
+shows the cross-section (top plot) and rate (bottom plot) calculated through the generator and, for the rate, estimated by using the "clasev" fastMC.
+
+while
+
+TCanvas  c_gen_check;1
+
+show the cross-section distribution as extracted from the generated data - to cross-check they are consistent with the original distribution.
+
+
+b) The TGraphs
+
+  TGraph   ge_sigma_rad_theta_N
+  TGraph   ge_rate_theta_N
+
+show the distributions as a function of the electron energy of the rate and cross-section at theta=N (deg).
+
+n.b. Look at them setting the logarithmic scale on the y axis through
+
+gPad->SetLogy(1)
+
+
+c) The histograms
+
+   TH1D     h_projY_theta_22
+
+show the distribution of the cross-section at theta = N (deg) of the generated data.
+
+n.b. Look at them setting the logarithmic scale on the y axis through
+
+gPad->SetLogy(1)
+
+
+d) The canvases
+
+  TCanvas  c_compare_theta_N
+
+show the comparisons among the original (solid, black curve) and the generated data (colored curve) at theta=N (deg), and appear
+in the output rootfile if the method at point #6 of the previous instructions, i.e.
+
+t->CompareGenEventsToOriginal();
+
+has been called.
+
+
+
+* -------------------------------------------------------------------------------------------- *
 
 p.s. To use the pre-existing cross-section tables, the settings
 
