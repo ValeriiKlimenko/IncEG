@@ -1,3 +1,10 @@
+/* ---------------------------------- */
+/*    Frascati, March 17th, 2016.     */
+/*                                    */
+/*       author: Silvia Pisano        */
+/*        pisanos@jlab.org            */
+/*    silvia.pisano@lnf.infn.it       */
+/* ---------------------------------- */
 #ifndef _DIS_CONSTANTS_
 #define _DIS_CONSTANTS_
 

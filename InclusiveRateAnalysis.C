@@ -1,3 +1,10 @@
+/* ---------------------------------- */
+/*    Frascati, March 17th, 2016.     */
+/*                                    */
+/*       author: Silvia Pisano        */
+/*        pisanos@jlab.org            */
+/*    silvia.pisano@lnf.infn.it       */
+/* ---------------------------------- */
 #include<InclusiveRateAnalysis.h>
 
 #ifndef _INCLUSIVERATEANALYSIS_C_
