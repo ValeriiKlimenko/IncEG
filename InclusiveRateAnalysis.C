@@ -1285,7 +1285,7 @@ void InclusiveRateAnalysis::GeneratePseudoData( Int_t _n_events, Int_t _n_events
     hThetavsPhiGen -> Fill( _phi, _theta );
 
 
-    _out_lund_file[ _file_number ] << "         1" << "  " <<  "1.0" << "  " <<  "1.0" << "   " <<  "0" << "   " <<  "1" << "   " <<  _xb << "   " <<  _y << "   " <<  _w*_w << "   " <<  _q2 << "   " <<  _nu <<  endl ;
+    _out_lund_file[ _file_number ] << "         1" << "  " <<  "1.0" << "  " <<  "1.0" << "   " <<  "0" << "   " <<  "1" << "   " <<  _xb << "   " <<  _y << "   " <<  _w << "   " <<  _q2 << "   " <<  _nu <<  endl ;
 
     _out_lund_file[ _file_number ] << "  " << 1 << "   " <<  "-1" << "   " <<  "1" << "   " <<  11 << "     " <<  0 << "     " <<  0 << "   " <<   _px << "   " <<   _py << "   " <<  _pz << "   " <<  _energy << "   " <<  ElectronMass << "   " <<  "0.0000" << "   " <<   "0.0000" << "   " <<   "0.0000" <<  endl ;
 
