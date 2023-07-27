@@ -31,6 +31,7 @@ C        INCLUDE 'inclusive$src:COMMON_INCL.CMN'
         CHARACTER*60 titles
         common/nsimp/nw0
         REAL initial_data(6)
+        INTEGER*8 k_sum
         write(6,1)
 **********************************************************************
 *       read initial conditions file
@@ -218,6 +219,7 @@ c
             IF(name(2).EQ.' MILIBARN ') v_measure = 1000000.
             IF(name(2).EQ.' MICROBARN') v_measure = 1000.
             IF(name(2).EQ.' NANOBARN ') v_measure = 1.
+            IF(name(2).EQ.' CUSTBARN ') v_measure = 0.01
             IF(name(2).EQ.' PICOBARN ') v_measure = 0.001
           ENDIF
 ************************************************************************
@@ -238,8 +240,8 @@ c
     1   FORMAT(80('='))
    24   FORMAT(a60)
    25   FORMAT(5x,a60)
-   26   FORMAT(a10,a10,6f8.3)
-   27   FORMAT(5x,a10,a10,6f8.3)
+   26   FORMAT(a10,a10,6f9.4)
+   27   FORMAT(5x,a10,a10,6f8.4)
    28   FORMAT(80('=')/17x,'Data  --  ',i6,1x,'-- Time --  ',i4,'  --'
      &        /80('='))
 *        CALL datime(jd,jt)
@@ -281,7 +283,7 @@ c
       COMMON/simp0/eps_p,eps_u,eps_r/k_process/k_process
       COMMON/new_int/r_acc,a_acc,k_int,s_int
       common/nsimp/nw0
-
+      INTEGER*8 k_sum
 C-
 	include 'common_incl.cmn'
 C-
@@ -374,6 +376,7 @@ C      ENDIF
       IF(v_m.EQ.1000000.)WRITE(7,*)' =CROSS SECTION IN (mlbn/GeV/Str)='
       IF(v_m.EQ.1000.)   WRITE(7,*)' =CROSS SECTION IN (mcbn/GeV/Str)='
       IF(v_m.EQ.1.)      WRITE(7,*)' =CROSS SECTION IN (nbn/GeV/Str)= '
+      IF(v_m.EQ.0.01)WRITE(7,*)' =CROSS SECTION IN (nbn/GeV/Str/100)= '
       IF(v_m.EQ.0.001)   WRITE(7,*)' =CROSS SECTION IN (pkbn/GeV/Str)='
       WRITE(7,*)' ================================================'
 *********************************************************************
@@ -1523,6 +1526,7 @@ C*******************************************************************
       IF(v_m.EQ.1000000.)WRITE(7,*)' =CROSS SECTION IN (mlbn/GeV/Str)='
       IF(v_m.EQ.1000.)   WRITE(7,*)' =CROSS SECTION IN (mcbn/GeV/Str)='
       IF(v_m.EQ.1.)      WRITE(7,*)' =CROSS SECTION IN (nbn/GeV/Str)= '
+      IF(v_m.EQ.0.01)WRITE(7,*)' =CROSS SECTION IN (nbn/GeV/Str/100)= '
       IF(v_m.EQ.0.001)   WRITE(7,*)' =CROSS SECTION IN (pkbn/GeV/Str)='
       WRITE(7,*)' ================================================'
 *********************************************************************
@@ -3027,6 +3031,7 @@ C====== FACTOR OF INTERNAL BREMSHTROULING =====
       COMMON/bin/width_e,width_u,i_case
       COMMON/simp0/rep,reu,eps_r
       COMMON/r_int/eps
+      INTEGER*8 k_sum
 C-
 	include 'common_incl.cmn'
 	real q2,sinuet,epsilon,gamma_t,gamma_w,jacob
@@ -3067,6 +3072,7 @@ C=======================================================================
       IF(v_m.EQ.1000000.)WRITE(6,*)' =CROSS SECTION IN (mlbn/GeV/Str)='
       IF(v_m.EQ.1000.)   WRITE(6,*)' =CROSS SECTION IN (mcbn/GeV/Str)='
       IF(v_m.EQ.1.)      WRITE(6,*)' =CROSS SECTION IN (nbn/GeV/Str)= '
+      IF(v_m.EQ.0.01) WRITE(7,*)' =CROSS SECTION IN (nbn/GeV/Str/100)= '
       IF(v_m.EQ.0.001)   WRITE(6,*)' =CROSS SECTION IN (pkbn/GeV/Str)='
       WRITE(6,*)' ================================================'
 *********************************************************************
@@ -3155,7 +3161,7 @@ c        WRITE(6,19)q2
           t_el = h_elast_r(ei,ue) / width_e  / v_m *                ! Elastic
      *       tet(ero-(er-width_e/2.))*tet((er+width_e/2.)-ero)  ! scattering
 *
-          t_tl = h_el_tail(ei,er,ue) / v_m   !  Radiative tail from elastic peak
+          t_tl = h_el_tail(ei,er,ue) / v_m !  Radiative tail from elastic peak
 *
           t_in  = h_inel_r(ei,er,ue) / v_m   !  Inelastic scattering
 *
@@ -3169,8 +3175,22 @@ c        WRITE(6,19)q2
          t_su_t=t_su/gamma_t
          y_su_tw=y_su_w/gamma_w
          t_su_tw=t_su_w/gamma_w
+         t_in_w = t_in*jacob
+         t_el_tl = t_el + t_tl
+         t_el_tl_w = (t_el + t_tl)*jacob
+         write (6, *) t_in, t_in_w, t_el_tl, t_el_tl_w
+c     full output
           WRITE(26,103)uet,er,y_su,t_su,gp2,w,
      &    y_su_w,t_su_w
+c     radiative inelastic output
+           WRITE(27,103)uet,er,y_su,t_in,gp2,w,
+     &    y_su_w,t_in_w
+c     radiatve + nonradiative elastic 
+           WRITE(28,103)uet,er,y_su,t_el_tl,gp2,w,
+     &    y_su_w,t_el_tl_w 
+c     born inelastic output 
+           WRITE(29,103)uet,er,y_su,t_in,gp2,w,
+     &    y_su_w,y_in
 ********************************************************
           write(6,*)'CALCULATED NUMBER =',ke
 ********************************************************
@@ -3254,7 +3274,7 @@ C     .........................
       gi = 2.*pm*q0
       ww = (gi+1.642)/(q2+0.376)
       t  = (1.-1./ww)
-      wp = 0.256*t**3+2.178*t**4+0.898*t**5-6.716*t**6+3.756*t**7
+      wp=0.2367*t**3+2.178*t**4+0.898*t**5-6.726*t**6+3.718*t**7
       gp_h=wp*ww*q2/(2.*pm*q0)*fact(q2,xx)
       RETURN
       END
@@ -3852,12 +3872,6 @@ C  **** D PARTIAL WAVE *****                                            A1507570
       RETURN
       END
 
-
-
-
-                                                        
-
-
 * b.f
 C  *******************************                                      A1505970
 C  *    BODEK PARAMETRIZATION    *                                      A1505980
@@ -3868,10 +3882,10 @@ C  *******************************                                      A1505990
       DATA PMSQ/0.880324/,PM2/1.876512/,PM/0.938256/                    A1506030
       DATA NRES/4/,NBKG/5/                                              A1506040
       DATA LSPIN/1,2,3,2/                                               A1506050
-      DATA C/1.0741163,0.75531124,3.3506491,1.7447015,3.5102405,1.040004A1506060
-     *,1.2299128,0.10625394,0.48132786,1.5101467,0.081661975,0.65587179,A1506070
-     *1.7176216,0.12551987,0.7473379,1.953819,0.19891522,-0.17498537,   A1506080
-     *0.0096701919,-0.035256748,3.5185207,-0.59993696,4.7615828,0.411675A1506090
+      DATA C/1.0741163,0.75531124,3.3506491,1.7447015,3.5102405,1.14391 A1506060
+     *,1.2299128,0.114735,0.621974,1.49826,0.12269,0.514898,            A1506070
+     *1.71184,0.1177,0.51329,1.94343,0.202702,-0.17498537,              A1506080
+     *0.0096701919,-0.035256748,3.5185207,-0.599937,4.7615828,0.411675  A1506090
      *89/                                                               A1506100
       B=0.                                                              A1506110
       IF(WM.LE.0.94)RETURN                                              A1506120
